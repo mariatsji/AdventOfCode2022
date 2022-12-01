@@ -1,0 +1,7 @@
+cradle:
+  cabal:
+    - path: "src"
+      component: "lib:AoC2022"
+
+    - path: "app/Main.hs"
+      component: "AoC2022:exe:aoc"
