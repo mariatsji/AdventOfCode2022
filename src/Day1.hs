@@ -1,4 +1,4 @@
-module Lib (day1a, day1b) where
+module Day1 (day1a, day1b) where
 
 import Data.Attoparsec.Text
 import qualified Data.List
