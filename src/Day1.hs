@@ -17,9 +17,6 @@ solution part txt =
 
 chunkParser :: Parser Chunk
 chunkParser = do
-    nrs <- many $ do
-        nr <- scientific
-        _ <- endOfLine
-        pure nr
+    nrs <- many (scientific <* endOfLine)
     _ <- endOfLine
     pure $ fmap (fromMaybe 0 . toBoundedInteger) nrs

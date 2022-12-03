@@ -11,9 +11,7 @@ data Round = Round Hand Hand
 
 solution :: Part -> Text -> Either String Int
 solution part txt =
-    let parser = case part of
-            PartA -> roundParserA
-            PartB -> roundParserB
+    let parser = roundParser part
      in parseOnly (many parser) txt <&> (sum . fmap roundScoreTotal)
 
 handScore :: Round -> Int
@@ -23,7 +21,7 @@ handScore (Round _ your) = case your of
     Scissors -> 3
 
 roundScoreTotal :: Round -> Int
-roundScoreTotal r = roundScore r + handScore r
+roundScoreTotal = liftA2 (+) roundScore handScore
 
 -- opponent -> you
 roundScore :: Round -> Int
@@ -34,28 +32,22 @@ roundScore (Round a b)
     | a == b = 3
     | otherwise = 0
 
-roundParserB :: Parser Round
-roundParserB = do
+roundParser :: Part -> Parser Round
+roundParser part = do
     opp <- handParserA
     _ <- space
-    you <- handParserB opp
-    _ <- endOfLine <|> endOfInput
-    pure $ Round opp you
-
-roundParserA :: Parser Round
-roundParserA = do
-    opp <- handParserA
-    _ <- space
-    you <- handParserA
+    you <- case part of
+        PartA -> handParserA
+        PartB -> handParserB opp
     _ <- endOfLine <|> endOfInput
     pure $ Round opp you
 
 handParserA :: Parser Hand
-handParserA = rockParser <|> paperParser <|> scissorsParser
+handParserA = rock <|> paper <|> scissors
   where
-    rockParser = Rock <$ (char 'A' <|> char 'X')
-    paperParser = Paper <$ (char 'B' <|> char 'Y')
-    scissorsParser = Scissors <$ (char 'C' <|> char 'Z')
+    rock = Rock <$ (char 'A' <|> char 'X')
+    paper = Paper <$ (char 'B' <|> char 'Y')
+    scissors = Scissors <$ (char 'C' <|> char 'Z')
 
 handParserB :: Hand -> Parser Hand
 handParserB opp =
