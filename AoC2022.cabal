@@ -17,7 +17,8 @@ common warnings
 
 library
     import:           warnings
-    exposed-modules:  Day1,
+    exposed-modules:  Part,
+                      Day1,
                       Day2
     build-depends:    base ^>=4.15.1.0,
                       attoparsec,

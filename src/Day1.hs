@@ -1,25 +1,19 @@
-module Day1 (day1a, day1b) where
+module Day1 (solution) where
 
 import Data.Attoparsec.Text
 import qualified Data.List
 import Data.Scientific (toBoundedInteger)
+import Part
 import Relude
 
 type Chunk = [Int]
-type Chunks = [Chunk]
 
-day1b :: Text -> Either String Int
-day1b txt =
-    parseOnly chunksParser txt
-        <&> (sum . Data.List.take 3 . reverse . sort . fmap sum)
-
-day1a :: Text -> Either String Int
-day1a txt =
-    parseOnly chunksParser txt
-        <&> (Data.List.maximum . fmap sum)
-
-chunksParser :: Parser Chunks
-chunksParser = many chunkParser
+solution :: Part -> Text -> Either String Int
+solution part txt =
+    let f = case part of
+            PartA -> Data.List.maximum . fmap sum
+            PartB -> sum . Data.List.take 3 . reverse . sort . fmap sum
+     in parseOnly (many chunkParser) txt <&> f
 
 chunkParser :: Parser Chunk
 chunkParser = do
