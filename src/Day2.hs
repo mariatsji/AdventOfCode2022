@@ -52,13 +52,13 @@ handParserA = rock <|> paper <|> scissors
 handParserB :: Hand -> Parser Hand
 handParserB opp =
     looseTo opp <$ char 'X'
-        <|> drawTo opp <$ char 'Y'
-        <|> winTo opp <$ char 'Z'
+        <|> draw opp <$ char 'Y'
+        <|> win opp <$ char 'Z'
   where
     looseTo Paper = Rock
     looseTo Rock = Scissors
     looseTo Scissors = Paper
-    drawTo x = x
-    winTo Paper = Scissors
-    winTo Rock = Paper
-    winTo Scissors = Rock
+    draw x = x
+    win Paper = Scissors
+    win Rock = Paper
+    win Scissors = Rock
